@@ -119,6 +119,7 @@ modelList[[11]] <- glm(legendary ~ spe +
                          spAtk:spDef + 
                          type_Mono, family = binomial(link = "logit"), data = trainData)
 
+modelListAvg <- list(modelList[[5]], modelList[[12]])
 
 modelList[[12]] <- glm(legendary ~ hp + atk + def + spAtk + spDef + spe + atk*def + spAtk*spDef, family = binomial(link = "logit"), data = trainData)
 
@@ -126,6 +127,7 @@ modelList[[13]] <- glm(legendary ~ hp + atk + def + spAtk + spDef + spe +
                          atk*def + spAtk*spDef + type_Mono +
                          type_Psychic + type_Dragon + type_Flying, family = binomial(link = "logit"), data = trainData)
 
+table(predictLabel, trainData$legendary)
 
 
 # # Summary and comparison ----
