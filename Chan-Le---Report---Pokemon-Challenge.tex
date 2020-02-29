@@ -1,0 +1,290 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Pokemon Challenge},
+            pdfauthor={Chan Le},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Pokemon Challenge}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Chan Le}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2/26/2020}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
+\begin{document}
+\maketitle
+
+\hypertarget{i.-introduction}{%
+\section{\texorpdfstring{\textbf{I.
+Introduction}}{I. Introduction}}\label{i.-introduction}}
+
+\hypertarget{a.-the-pocket-monsters-universe}{%
+\subsection{\texorpdfstring{\textbf{A. The Pocket Monsters
+Universe}}{A. The Pocket Monsters Universe}}\label{a.-the-pocket-monsters-universe}}
+
+Pokemon (Pocket Monsters) is orginally a series of console video games
+developed by GameFreak, published by Nintendo, and is later adapted into
+numerous different media. Since its original work of Pokemon Red and
+Blue, Pokeon has grown into one of the most well-known media franchise
+of all time.
+
+The Pokemon universe is based on the fitional creatures of the same name
+and their relationship with human. In the Pokemon world, Trainers
+capture wild Pokemons with Pokeballs and raise them as their own
+partners. Trainers can also battle among each others to gain experience,
+and have one common goal of defeating the Elite Four and the Pokemon
+Champion, who are said to be the strongest Pokemon Trainers yet.
+
+Up until Generation 6, there are 721 Pokemon species founded in the
+wild. Some of them have multiple forms (which differ in the distribution
+of stats), raising the number of all different versions of Pokemon
+species captured in this data set to .
+
+\hypertarget{b.-base-stat-values---pokemon-species-uniqueness}{%
+\subsection{\texorpdfstring{\textbf{B. Base Stat Values - Pokemon
+Species
+Uniqueness}}{B. Base Stat Values - Pokemon Species Uniqueness}}\label{b.-base-stat-values---pokemon-species-uniqueness}}
+
+Principally, a Pokemon is determined by its statistics (stats). There
+are six main permanant stats that make up a Pokemon's over strength:
+
+\begin{itemize}
+\tightlist
+\item
+  HP (Hit Points): determine how much damage a Pokémon can receive
+  before fainting.
+\item
+  Atk (Attack): partly determines how much damage a Pokémon deals when
+  using a physical move.
+\item
+  Def (Defense): partly determines how much damage a Pokémon receives
+  when it is hit with a physical move.
+\item
+  SpAtk (Special Attack): partly determines how much damage a Pokémon
+  deals when using a special move.
+\item
+  SpDef (Special Defense): partly determines how much damage a Pokémon
+  receives when it is hit with a special move.
+\item
+  Spe (Speed): determines the order of Pokémon that can act in battle.
+\end{itemize}
+
+There are many elements that can affect these stats, so that hardly no
+two Pokemons are identical. However, each Pokemon species will have its
+own set of base stat values, which in turn has a great impact on a
+certain individual Pokemon at any level. This table shows the first 5
+Pokemon (species) and their base stats:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages --------------------------------------------------------------------------- tidyverse 1.3.0 --
+\end{verbatim}
+
+\begin{verbatim}
+## <U+2713> ggplot2 3.2.1     <U+2713> purrr   0.3.3
+## <U+2713> tibble  2.1.3     <U+2713> dplyr   0.8.3
+## <U+2713> tidyr   1.0.0     <U+2713> stringr 1.4.0
+## <U+2713> readr   1.3.1     <U+2713> forcats 0.4.0
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ------------------------------------------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# # Input data and reset name ----}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read.csv2}\NormalTok{(}\StringTok{"pokemon.csv"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{","}\NormalTok{)}
+
+\KeywordTok{colnames}\NormalTok{(data) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"index"}\NormalTok{,}\StringTok{"name"}\NormalTok{,}\StringTok{"type1"}\NormalTok{,}\StringTok{"type2"}\NormalTok{,}\StringTok{"hp"}\NormalTok{,}\StringTok{"atk"}\NormalTok{,}\StringTok{"def"}\NormalTok{,}\StringTok{"spAtk"}\NormalTok{,}\StringTok{"spDef"}\NormalTok{,}\StringTok{"spe"}\NormalTok{,}\StringTok{"gen"}\NormalTok{,}\StringTok{"legendary"}\NormalTok{)}
+
+\NormalTok{statName <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"hp"}\NormalTok{,}\StringTok{"atk"}\NormalTok{,}\StringTok{"def"}\NormalTok{,}\StringTok{"spAtk"}\NormalTok{,}\StringTok{"spDef"}\NormalTok{,}\StringTok{"spe"}\NormalTok{)}
+
+\NormalTok{  data }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{5}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(name, hp, atk, def, spAtk, spDef, spe) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(, }\DataTypeTok{col.names =} \KeywordTok{c}\NormalTok{(}\StringTok{"Name"}\NormalTok{,}\StringTok{"HP"}\NormalTok{,}\StringTok{"Attack"}\NormalTok{,}\StringTok{"Defense"}\NormalTok{,}\StringTok{"Sp.Attack"}\NormalTok{,}\StringTok{"Sp.Defense"}\NormalTok{,}\StringTok{"Speed"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\NormalTok{kableExtra}\OperatorTok{::}\KeywordTok{kable_styling}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in kableExtra::kable_styling(.): Please specify format in kable.
+## kableExtra can customize either HTML or LaTeX outputs. See https://
+## haozhu233.github.io/kableExtra/ for details.
+\end{verbatim}
+
+\begin{longtable}[]{@{}lrrrrrr@{}}
+\toprule
+Name & HP & Attack & Defense & Sp.Attack & Sp.Defense &
+Speed\tabularnewline
+\midrule
+\endhead
+Bulbasaur & 45 & 49 & 49 & 65 & 65 & 45\tabularnewline
+Ivysaur & 60 & 62 & 63 & 80 & 80 & 60\tabularnewline
+Venusaur & 80 & 82 & 83 & 100 & 100 & 80\tabularnewline
+Mega Venusaur & 80 & 100 & 123 & 122 & 120 & 80\tabularnewline
+Charmander & 39 & 52 & 43 & 60 & 50 & 65\tabularnewline
+\bottomrule
+\end{longtable}
+
+There is hardly no two identical Pokemons,
+
+\hypertarget{the-legendary-pokemon}{%
+\subsection{\texorpdfstring{\textbf{The Legendary
+Pokemon}}{The Legendary Pokemon}}\label{the-legendary-pokemon}}
+
+Boardly, Pokemons can be divided into two groups:
+
+\hypertarget{picture-of-fav-legendaty-poks}{%
+\subparagraph{Picture of fav legendaty
+Poks}\label{picture-of-fav-legendaty-poks}}
+
+\hypertarget{plot-legendary-vs-normal-stats}{%
+\subparagraph{Plot legendary vs normal
+stats}\label{plot-legendary-vs-normal-stats}}
+
+\hypertarget{plot-legendary-numbers-by-types}{%
+\subparagraph{Plot legendary numbers by
+types}\label{plot-legendary-numbers-by-types}}
+
+\hypertarget{pokemon-with-multiple-forms}{%
+\subparagraph{Pokemon with multiple
+forms}\label{pokemon-with-multiple-forms}}
+
+
+\end{document}
