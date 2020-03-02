@@ -1,0 +1,133 @@
+---
+title: "Pokemon Challenge"
+author: "Chan Le"
+date: "2/26/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+# **I. Introduction**
+
+## **A. The Pocket Monsters Universe**
+Pokemon (Pocket Monsters) is orginally a series of console video games developed by GameFreak, published by Nintendo, and is later adapted into numerous different media. Since its original work of Pokemon Red and Blue, Pokeon has grown into one of the most well-known media franchise of all time.
+
+The Pokemon universe is based on the fitional creatures of the same name and their relationship with human. In the Pokemon world, Trainers capture wild Pokemons with Pokeballs and raise them as their own partners. Trainers can also battle among each others and challenge Gym Leaders to gain experience, and have one common goal of defeating the Elite Four and the Pokemon Champion, who are said to be the strongest Pokemon Trainers yet. 
+
+Up until Generation 6, there are 721 Pokemon species founded in the wild. Some of them have multiple forms (which differ in the distribution of stats), raising the number of all different versions of Pokemon species captured in this data set to `r nrow(data)`. From this point on, if I mention the number of Pokemon, I also count in all possible forms on one species.
+
+## **B. Base Stat Values - Pokemon species uniqueness**
+Principally, a Pokemon is determined by its statistics (stats). There are six main permanant stats that make up a Pokemon's over strength:
+
+  - HP (Hit Points): determine how much damage a Pokémon can receive before fainting. 
+  - Atk (Attack): partly determines how much damage a Pokémon deals when using a physical move. 
+  - Def (Defense): partly determines how much damage a Pokémon receives when it is hit with a physical move.
+  - SpAtk (Special Attack): partly determines how much damage a Pokémon deals when using a special move.
+  - SpDef (Special Defense): partly determines how much damage a Pokémon receives when it is hit with a special move.
+  - Spe (Speed): determines the order of Pokémon that can act in battle.
+  
+There are many elements that can affect these stats, so that hardly no two Pokemons are identical. However, each Pokemon species will have its own set of base stat values, which in turn has a great impact on a certain individual Pokemon's stats at any level. This table shows the first 5 Pokemon (species) and their base stats:
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+  library(tidyverse)
+  library(randomForestExplainer)
+  library(Amelia)
+  library(corrplot)
+  library(fastDummies)
+  library(AICcmodavg)
+  library(caret)
+  library(randomForest)
+  library(knitr)
+  library(kableExtra)
+  theme_set(theme_bw())
+
+# # Input data and reset name ----
+data <- read.csv2("pokemon.csv", sep = ",")
+
+colnames(data) <- c("index","name","type1","type2","hp","atk","def","spAtk","spDef","spe","gen","legendary")
+
+statName <- c("hp","atk","def","spAtk","spDef","spe")
+
+  data %>% head(5) %>% select(name, hp, atk, def, spAtk, spDef, spe) %>% 
+  knitr::kable(, col.names = c("Name","HP","Attack","Defense","Sp.Attack","Sp.Defense","Speed")) %>% 
+  kableExtra::kable_styling()
+```
+
+## **Pokemon Types - Another deciding factor**
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+# # Set dummies for Types ----
+data$type2 <- as.character(data$type2)
+
+data <- data %>% mutate(type2 = replace(type2, type2 == "", "Mono")) 
+
+data$type2 <- as.factor(data$type2)
+
+# Dumify dual types
+dataDummy <- data %>% 
+  mutate(type = paste0(type1,"_", type2)) %>% # Combine 2 types into one cells
+  select(-type1, -type2) %>% 
+  dummy_cols(select_columns = "type", 
+             split = "_") # Split them again to have multiple categories in the dummies
+
+# Remove column used for dummification and 1 other column to avoid multicollinearity
+dataDummy <- dataDummy %>% select(-type, -type_Normal)
+
+# Take out index column
+dataDummy <-  dataDummy %>% select(-index, -name, -gen)
+```
+
+Types are properties for Pokemon and their Moves. As of Generation VI, there are 18 types. One Pokemon can have one or two types. Out of `r nrow(data)` Pokemon species, there are 386 mono-type and 414 dual-type Pokemons. The following plots shows the distribution of Pokemon Species among different types:
+
+```{r fig.align="center", fig.width= 12, fig.height= 5, out.height= "50%", out.height= "50%", dpi= 300}
+data %>%  
+  select(type1, type2) %>% 
+  pivot_longer(everything(), names_to = "TypeNo", values_to = "Type") %>% 
+  filter(!Type == "Mono") %>% 
+  ggplot(aes(x = Type)) + geom_bar(alpha = 0.7) +
+  labs(title = "Pokemon Species Distribution, by Type") +
+  xlab("Type") + ylab("Number of Pokemon") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+data %>%  
+  select(type1, type2) %>% 
+  pivot_longer(everything(), names_to = "TypeNo", values_to = "Type") %>% 
+  table()
+```
+
+According to the plot, the Pokemon number among spieces is unevenly distributed. Water type accounts for the most Pokemon (126) with `r 126/800`%, where as Ice Pokemons are the rarest (38), making up only `38/800`% of all species.
+
+## **The Legendary Pokemon**
+Boardly, Pokemons can be divided into two groups: normal and legendary. Legendary Pokemons are
+
+```{r fig.align="center", fig.width= 12, fig.height= 5, out.height= "50%", out.height= "50%", dpi= 300}
+data %>% select(-index, -name, - gen) %>% 
+  pivot_longer(starts_with("type"), names_to = "TypeNo", values_to = "Type") %>% 
+  mutate(baseStat = hp + atk + def + spAtk + spDef + spe) %>% 
+  group_by(legendary, Type) %>% summarise(baseStat = mean(baseStat)) %>% 
+  ggplot(aes(x = Type, fill = legendary, y = baseStat)) + geom_bar(stat = "identity", position = "dodge") +
+    labs(title = "Average Base Stat among Types, Legendary vs Normal Pokemon") +
+    xlab("Type") + ylab("Average Base Stat ") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_fill_discrete(labels = c("Legendary", "Normal"), name = "Legendary Status")
+```
+
+```{r}
+data %>% filter(legendary == "True") %>% 
+  select(type1, type2) %>% 
+  pivot_longer(everything(), names_to = "TypeNo", values_to = "Type") %>% 
+  ggplot(aes(x = Type)) + geom_bar()
+```
+
+
+##### Picture of fav legendaty Poks
+
+##### Plot legendary vs normal stats
+
+##### Plot legendary numbers by types
+
+##### Pokemon with multiple forms
+

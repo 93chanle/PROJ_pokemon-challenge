@@ -2,10 +2,13 @@
 
 #----------CHAN LE, 19.02.20 -----------------#
 
-install.packages("fastDummies")
-install.packages("AICcmodavg")
-install.packages("randomForest")
+# install.packages("fastDummies")
+# install.packages("AICcmodavg")
+# install.packages("randomForest")
+install.packages("kableExtra")
+install.packages("imager")
 
+library(randomForestExplainer)
 library(tidyverse)
 library(Amelia)
 library(corrplot)
@@ -13,6 +16,7 @@ library(fastDummies)
 library(AICcmodavg)
 library(caret)
 library(randomForest)
+library(jpeg)
 
 # # Input data and reset name ----
 data <- read.csv2("pokemon.csv", sep = ",")
@@ -101,7 +105,8 @@ modelList[[8]] <- glm(legendary ~ hp + atk + def + spAtk + spDef + spe +
 
 modelList[[9]] <- glm(legendary ~ hp + atk + def + spAtk + spDef + spe + 
                         atk*spAtk + 
-                        def*spDef*hp + 
+                        atk*spe +
+                        spAtk*spe +
                         atk*def + 
                         spAtk*spDef + 
                         type_Mono + type_Dragon, family = binomial(link = "logit"), data = trainData)
@@ -127,7 +132,19 @@ modelList[[13]] <- glm(legendary ~ hp + atk + def + spAtk + spDef + spe +
                          atk*def + spAtk*spDef + type_Mono +
                          type_Psychic + type_Dragon + type_Flying, family = binomial(link = "logit"), data = trainData)
 
-table(predictLabel, trainData$legendary)
+modelList[[14]] <- glm(legendary ~ hp + atk + def + spDef + spe + 
+                         atk*def + 
+                         type_Flying, family = binomial(link = "logit"), data = trainData)
+
+modelLogRFormular <- data.frame(Formular = c("legendary ~ hp + atk + def + spAtk + spDef + spe",
+                                             "legendary ~ hp + atk + def + spAtk + spDef + spe + type_Mono",
+                                             "legendary ~ hp + atk*def + spAtk*spDef + spe + type_Mono",
+                                             "legendary ~ hp + atk*spAtk + def*spDef + spe + type_Mono",
+                                             "legendary ~ hp + atk*spe + def*spDef + spAtk*spe + type_Mono + type_Psychic + type_Dragon + type_Flying",
+                                             "legendary ~ hp + atk + def + spAtk + spDef + spe + type_Psychic + type_Dragon + type_Flying + type_Mono"))
+
+glm(as.character(modelLogRFormular[1,1]), family = binomial(link = "logit"), data = trainData)
+
 
 
 # # Summary and comparison ----
@@ -136,16 +153,24 @@ names <- paste("mod",1:length(modelList),sep = "")
 # Compare candidate models
 aictab(cand.set = modelList, modnames = names, sort = TRUE)
 
-modelListAvg <- list(modelList[[5]], modelList[[12]])
-
-# Create average model
-modavg(modelListAvg, parm = "legendary")
+# Create average model from 3 best
+modelAvg <- list(modelList[[13]], modelList[[12]], modelList[[5]])
 
 # Check accuracy in training data
-predictLabel <- predict(modelList[[5]], type = "response")
+predictLabel <- predict(modelAvg, type = "response")
+
+predictLabel <- (predictLabel[[1]] + predictLabel[[2]]  + predictLabel[[3]])/3
+
 predictLabel <- ifelse(predictLabel < 0.5, FALSE, TRUE)
 
 table(predictLabel, trainData$legendary)
+
+# Check accuracy for one model
+predictLabel <- predict(modelList[[14]], type = "response")
+
+predictLabel <- ifelse(predictLabel < 0.5, FALSE, TRUE)
+
+table(predictLabel, trainData$legendary) %>% as.data.frame()
 
 # # Random forest model ----
 modelListRF <- list()
@@ -156,10 +181,15 @@ testDataRF <- data[-index,] %>% select(-index, -name, -gen, -legendary)
 testDataRFLabel <- data[-index,]$legendary
 
 modelListRF[[1]] <- randomForest(legendary ~ ., data = trainDataRF, 
-                                 mtry = 3, ntree = 2500)
+                                 mtry = 3, ntree = 2500, localImp = TRUE)
+
+explain_forest(modelListRF[[1]], interactions = TRUE, data = trainDataRF)
+
 
 modelListRF[[2]] <- randomForest(legendary ~ ., data = trainData,
-                                 mtry = 3, ntree = 2500)
+                                 mtry = 3, ntree = 2500,  localImp = TRUE)
+
+explain_forest(modelListRF[[2]], interactions = TRUE, data = trainData)
 
 modelListRF[[2]]$importance
 
@@ -197,11 +227,11 @@ gridSearchRF %>% filter(OBB == min(OBB))
 
 
 
+image <- load.image("https://www.pngitem.com/pimgs/m/2-25253_pokemon-pikachu-free-png-image-pokemon-mastermind-of.png")
 
+plot(image, axes = FALSE)
 
-
-
-
+imager::
 
 
 
